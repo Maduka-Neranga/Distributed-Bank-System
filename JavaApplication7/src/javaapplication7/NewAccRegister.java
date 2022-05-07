@@ -6,12 +6,21 @@
 
 package javaapplication7;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Ash
  */
 public class NewAccRegister extends javax.swing.JFrame {
 
+    
+    Connection con = null;
+    PreparedStatement pst = null;
+    
     /**
      * Creates new form NewAccRegister
      */
@@ -94,6 +103,8 @@ public class NewAccRegister extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel3.setText("First Name");
 
+        txtFirstName.setName(""); // NOI18N
+
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel4.setText("Last Name");
 
@@ -102,6 +113,8 @@ public class NewAccRegister extends javax.swing.JFrame {
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel6.setText("Birthday");
+
+        txtBDay.setName(""); // NOI18N
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel7.setText("Tel No");
@@ -122,8 +135,18 @@ public class NewAccRegister extends javax.swing.JFrame {
         jLabel12.setText("Confirm Password");
 
         btnCreate.setText("Create");
+        btnCreate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCreateActionPerformed(evt);
+            }
+        });
 
         btnClear.setText("Clear");
+        btnClear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnClearActionPerformed(evt);
+            }
+        });
 
         btnBack.setText("Back");
         btnBack.addActionListener(new java.awt.event.ActionListener() {
@@ -238,7 +261,7 @@ public class NewAccRegister extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnClear)
                     .addComponent(btnCreate))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnBack)
                 .addContainerGap())
         );
@@ -264,6 +287,45 @@ public class NewAccRegister extends javax.swing.JFrame {
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnBackActionPerformed
+
+    private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
+        // TODO add your handling code here:
+        txtFirstName.setText("");
+        txtLastName.setText("");
+        txtSurname.setText("");
+        txtBDay.setText("");
+        txtTelNo.setText("");
+        txtAddress.setText("");
+        txtGender.setText("");
+        txtAccNo.setText("");
+        txtPassword.setText("");
+        txtConPassword.setText("");
+    }//GEN-LAST:event_btnClearActionPerformed
+
+    private void btnCreateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateActionPerformed
+        // TODO add your handling code here:
+        try{
+            String queryStr = "INSERT INTO client VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+            con = DriverManager.getConnection("jdbc:mysql://localhost/bankdatabase", "root", "");
+            pst = con.prepareStatement(queryStr);
+            pst.setString(1, txtFirstName.getText());
+            pst.setString(2, txtLastName.getText());
+            pst.setString(3, txtSurname.getText());
+            pst.setString(4, txtBDay.getText());
+            pst.setString(5, txtTelNo.getText());
+            pst.setString(6, txtAddress.getText());
+            pst.setString(7, txtGender.getText());
+            pst.setString(8, txtAccNo.getText());
+            pst.setString(9, txtPassword.getText());
+            pst.setString(10, txtConPassword.getText());
+            pst.executeUpdate();
+            
+            JOptionPane.showMessageDialog(null, "Registration successful");
+        }
+        catch (Exception e){
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }//GEN-LAST:event_btnCreateActionPerformed
 
     /**
      * @param args the command line arguments
