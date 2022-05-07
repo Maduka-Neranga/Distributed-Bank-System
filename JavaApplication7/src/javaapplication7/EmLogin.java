@@ -6,6 +6,12 @@
 
 package javaapplication7;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Ash
@@ -66,8 +72,18 @@ public class EmLogin extends javax.swing.JFrame {
         jLabel4.setText("Password");
 
         txtLogin.setText("Login");
+        txtLogin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtLoginActionPerformed(evt);
+            }
+        });
 
         txtClear.setText("Clear");
+        txtClear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtClearActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -135,6 +151,46 @@ public class EmLogin extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void txtClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtClearActionPerformed
+        // TODO add your handling code here:
+        txtUserName.setText("");
+        txtPassword.setText("");
+    }//GEN-LAST:event_txtClearActionPerformed
+
+    private void txtLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtLoginActionPerformed
+        // TODO add your handling code here:
+        
+        if(txtUserName.getText().trim().isEmpty() && txtPassword.getText().trim().isEmpty()){
+            JOptionPane.showMessageDialog(null, "Please enter username and password");
+        }
+        else{
+            try{
+           Class.forName("com.mysql.cj.jdbc.Driver");
+           Connection con = DriverManager.getConnection("jdbc:mysql://localhost/bankdatabase", "root", "");
+           String sql = "SELECT * FROM employee WHERE username = ? AND password = ?;";
+           PreparedStatement stmt = con.prepareStatement(sql);
+           stmt.setString(1, txtUserName.getText());
+           stmt.setString(2, txtPassword.getText());
+           ResultSet rs = stmt.executeQuery();
+           
+           if(rs.next()){
+               JOptionPane.showMessageDialog(null, "Username and Password Matched");
+           }
+           else{
+               JOptionPane.showMessageDialog(null, "Username and Password is not Matched");
+               txtUserName.setText("");
+               txtPassword.setText("");
+           }
+        }
+        catch (Exception e){
+            JOptionPane.showMessageDialog(null, e);
+        }
+        }
+        
+        
+        
+    }//GEN-LAST:event_txtLoginActionPerformed
 
     /**
      * @param args the command line arguments
