@@ -81,13 +81,13 @@ public class AccDetails extends javax.swing.JFrame {
 
         tblAccDetail.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Firstname", "Lastname", "Account Number", "Password"
+                "Firstname", "Lastname", "Surname", "Birthday", "Phonenumber", "Address", "Gender", "Account Number", "Password"
             }
         ));
         jScrollPane1.setViewportView(tblAccDetail);
@@ -190,13 +190,13 @@ public class AccDetails extends javax.swing.JFrame {
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost/bankdatabase", "root", "");
             
             Statement stmt = con.createStatement();
-            String queryStr = "SELECT firstname, lastname, accountnumber, password FROM client";
+            String queryStr = "SELECT * FROM client";
             ResultSet rs = stmt.executeQuery(queryStr);
             
             DefaultTableModel tblModel = (DefaultTableModel)tblAccDetail.getModel();
             tblModel.setRowCount(0);
             while(rs.next()){
-                tblModel.addRow(new String[] {rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4)});
+                tblModel.addRow(new String[] {rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9)});
             }
         }
         catch (Exception e){
@@ -211,13 +211,13 @@ public class AccDetails extends javax.swing.JFrame {
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost/bankdatabase", "root", "");
             
             Statement stmt = con.createStatement();
-            String queryStr = "SELECT firstname, lastname, accountnumber, password FROM client WHERE accountnumber = '"+txtAccNo.getText()+"';";
+            String queryStr = "SELECT * FROM client WHERE accountnumber = '"+txtAccNo.getText()+"';";
             ResultSet rs = stmt.executeQuery(queryStr);
             
             DefaultTableModel tblModel = (DefaultTableModel)tblAccDetail.getModel();
             tblModel.setRowCount(0);
             while(rs.next()){
-                tblModel.addRow(new String[] {rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4)});
+                tblModel.addRow(new String[] {rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9)});
             }
         }
         catch (Exception e){
