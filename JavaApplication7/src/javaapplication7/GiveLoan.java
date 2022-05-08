@@ -6,12 +6,22 @@
 
 package javaapplication7;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Ash
  */
 public class GiveLoan extends javax.swing.JFrame {
 
+    
+    Connection con = null;
+    PreparedStatement pst = null;
+    
+    
     /**
      * Creates new form GiveLoan
      */
@@ -87,8 +97,18 @@ public class GiveLoan extends javax.swing.JFrame {
         txtAccBalance.setText("000000000");
 
         txtGiveLoan.setText("Give Loan");
+        txtGiveLoan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtGiveLoanActionPerformed(evt);
+            }
+        });
 
         txtClear.setText("Clear");
+        txtClear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtClearActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -201,6 +221,36 @@ public class GiveLoan extends javax.swing.JFrame {
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void txtClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtClearActionPerformed
+        // TODO add your handling code here:
+        txtAccNo.setText("");
+        txtLoanAnount.setText("");
+        txtMonths.setText("");
+    }//GEN-LAST:event_txtClearActionPerformed
+
+    private void txtGiveLoanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtGiveLoanActionPerformed
+        // TODO add your handling code here:
+        try{
+            String queryStr = "INSERT INTO loan VALUES (?, ?, ?);";
+            con = DriverManager.getConnection("jdbc:mysql://localhost/bankdatabase", "root", "");
+            pst = con.prepareStatement(queryStr);
+            pst.setString(1, txtAccNo.getText());
+            pst.setString(2, txtLoanAnount.getText());
+            pst.setString(3, txtMonths.getText());
+            pst.executeUpdate();
+            
+            int perMonth = Integer.parseInt(txtLoanAnount.getText()) / Integer.parseInt(txtMonths.getText());
+            txtPerMonth.setText(String.valueOf(perMonth));
+            
+            JOptionPane.showMessageDialog(null, "Loan successful");
+            
+            
+        }
+        catch (Exception e){
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }//GEN-LAST:event_txtGiveLoanActionPerformed
 
     /**
      * @param args the command line arguments

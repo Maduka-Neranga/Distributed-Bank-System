@@ -6,12 +6,20 @@
 
 package javaapplication7;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Ash
  */
 public class DeleteAccount extends javax.swing.JFrame {
 
+    Connection con = null;
+    PreparedStatement pst = null;
+    
     /**
      * Creates new form DeleteAccount
      */
@@ -86,6 +94,11 @@ public class DeleteAccount extends javax.swing.JFrame {
         jLabel4.setText("Password");
 
         btnDelete.setText("Delete");
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
 
         txtDes.setColumns(20);
         txtDes.setRows(5);
@@ -161,6 +174,21 @@ public class DeleteAccount extends javax.swing.JFrame {
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnBackActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        // TODO add your handling code here:
+        try{
+            String queryStr = "DELETE FROM client WHERE accountnumber = '"+txtAccNo.getText()+"' AND password = '"+txtPass.getText()+"';";
+            con = DriverManager.getConnection("jdbc:mysql://localhost/bankdatabase", "root", "");
+            pst = con.prepareStatement(queryStr);
+            pst.executeUpdate();
+            
+            JOptionPane.showMessageDialog(null, "Delete Account successful");
+        }
+        catch (Exception e){
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }//GEN-LAST:event_btnDeleteActionPerformed
 
     /**
      * @param args the command line arguments

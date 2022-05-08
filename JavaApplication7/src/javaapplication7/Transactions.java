@@ -6,12 +6,22 @@
 
 package javaapplication7;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Ash
  */
 public class Transactions extends javax.swing.JFrame {
 
+    Connection con = null;
+    PreparedStatement pst = null;
+    
     /**
      * Creates new form Transactions
      */
@@ -119,6 +129,11 @@ public class Transactions extends javax.swing.JFrame {
 
         btnTransfer.setForeground(new java.awt.Color(0, 102, 204));
         btnTransfer.setText("Transfer");
+        btnTransfer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTransferActionPerformed(evt);
+            }
+        });
 
         jButton6.setText("Back");
         jButton6.addActionListener(new java.awt.event.ActionListener() {
@@ -213,6 +228,23 @@ public class Transactions extends javax.swing.JFrame {
 
     private void btnBalanceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBalanceActionPerformed
         // TODO add your handling code here:
+        try{
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost/bankdatabase", "root", "");
+            
+            Statement stmt = con.createStatement();
+            String queryStr = "SELECT amount FROM saving WHERE accountnumber = '"+txtSenderAccNo.getText()+"';";
+            ResultSet rs = stmt.executeQuery(queryStr);
+            
+            while(rs.next()){
+                lblBalance.setText(rs.getString(1));
+            }
+            
+            
+        }
+        catch (Exception e){
+             JOptionPane.showMessageDialog(null, e);
+        }
     }//GEN-LAST:event_btnBalanceActionPerformed
 
     private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
@@ -222,6 +254,24 @@ public class Transactions extends javax.swing.JFrame {
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void btnTransferActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTransferActionPerformed
+        // TODO add your handling code here:
+        try{
+            String queryStr = "INSERT INTO transaction VALUES (?, ?, ?);";
+            con = DriverManager.getConnection("jdbc:mysql://localhost/bankdatabase", "root", "");
+            pst = con.prepareStatement(queryStr);
+            pst.setString(1, txtSenderAccNo.getText());
+            pst.setString(2, txtAmount.getText());
+            pst.setString(3, txtRecAccNo.getText());
+            pst.executeUpdate();
+            
+            JOptionPane.showMessageDialog(null, "Transaction successful");
+        }
+        catch (Exception e){
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }//GEN-LAST:event_btnTransferActionPerformed
 
     /**
      * @param args the command line arguments

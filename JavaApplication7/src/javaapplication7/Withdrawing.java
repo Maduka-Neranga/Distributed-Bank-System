@@ -6,12 +6,22 @@
 
 package javaapplication7;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Ash
  */
 public class Withdrawing extends javax.swing.JFrame {
 
+    Connection con = null;
+    PreparedStatement pst = null;
+    
     /**
      * Creates new form Withdrawing
      */
@@ -89,6 +99,11 @@ public class Withdrawing extends javax.swing.JFrame {
         txtAmount.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 
         jButton2.setText("Clear");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jButton3.setText("Back");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
@@ -218,11 +233,49 @@ public class Withdrawing extends javax.swing.JFrame {
 
     private void btnBalanceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBalanceActionPerformed
         // TODO add your handling code here:
+        try{
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost/bankdatabase", "root", "");
+            
+            Statement stmt = con.createStatement();
+            String queryStr = "SELECT amount FROM saving WHERE accountnumber = '"+txtAccNo.getText()+"';";
+            ResultSet rs = stmt.executeQuery(queryStr);
+            
+            while(rs.next()){
+                lblBalance.setText(rs.getString(1));
+            }
+            
+            
+        }
+        catch (Exception e){
+             JOptionPane.showMessageDialog(null, e);
+        }
     }//GEN-LAST:event_btnBalanceActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
+        try{
+            String queryStr = "INSERT INTO withdraw VALUES (?, ?, ?);";
+            con = DriverManager.getConnection("jdbc:mysql://localhost/bankdatabase", "root", "");
+            pst = con.prepareStatement(queryStr);
+            pst.setString(1, txtAccNo.getText());
+            pst.setString(2, txtAmount.getText());
+            pst.setString(3, txtPassword.getText());
+            pst.executeUpdate();
+            
+            JOptionPane.showMessageDialog(null, "Transaction successful");
+        }
+        catch (Exception e){
+            JOptionPane.showMessageDialog(null, e);
+        }
     }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        txtAccNo.setText("");
+        txtAmount.setText("");
+        txtPassword.setText("");
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments

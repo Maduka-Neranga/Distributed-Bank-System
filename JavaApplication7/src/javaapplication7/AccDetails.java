@@ -6,6 +6,13 @@
 
 package javaapplication7;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Ash
@@ -80,7 +87,7 @@ public class AccDetails extends javax.swing.JFrame {
                 {null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Firstname", "Lastname", "Account Number", "Password"
             }
         ));
         jScrollPane1.setViewportView(tblAccDetail);
@@ -92,6 +99,11 @@ public class AccDetails extends javax.swing.JFrame {
         txtAccNo.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 
         btnShowDetail.setText("Show Details");
+        btnShowDetail.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnShowDetailActionPerformed(evt);
+            }
+        });
 
         btnBack.setText("Back");
 
@@ -100,6 +112,11 @@ public class AccDetails extends javax.swing.JFrame {
         jLabel11.setText("All Account Details");
 
         btnAllAccDetail.setText("Click");
+        btnAllAccDetail.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAllAccDetailActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -165,6 +182,48 @@ public class AccDetails extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnAllAccDetailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAllAccDetailActionPerformed
+        // TODO add your handling code here:
+        try{
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost/bankdatabase", "root", "");
+            
+            Statement stmt = con.createStatement();
+            String queryStr = "SELECT firstname, lastname, accountnumber, password FROM client";
+            ResultSet rs = stmt.executeQuery(queryStr);
+            
+            DefaultTableModel tblModel = (DefaultTableModel)tblAccDetail.getModel();
+            tblModel.setRowCount(0);
+            while(rs.next()){
+                tblModel.addRow(new String[] {rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4)});
+            }
+        }
+        catch (Exception e){
+             JOptionPane.showMessageDialog(null, e);
+        }
+    }//GEN-LAST:event_btnAllAccDetailActionPerformed
+
+    private void btnShowDetailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowDetailActionPerformed
+        // TODO add your handling code here:
+        try{
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost/bankdatabase", "root", "");
+            
+            Statement stmt = con.createStatement();
+            String queryStr = "SELECT firstname, lastname, accountnumber, password FROM client WHERE accountnumber = '"+txtAccNo.getText()+"';";
+            ResultSet rs = stmt.executeQuery(queryStr);
+            
+            DefaultTableModel tblModel = (DefaultTableModel)tblAccDetail.getModel();
+            tblModel.setRowCount(0);
+            while(rs.next()){
+                tblModel.addRow(new String[] {rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4)});
+            }
+        }
+        catch (Exception e){
+             JOptionPane.showMessageDialog(null, e);
+        }
+    }//GEN-LAST:event_btnShowDetailActionPerformed
 
     /**
      * @param args the command line arguments

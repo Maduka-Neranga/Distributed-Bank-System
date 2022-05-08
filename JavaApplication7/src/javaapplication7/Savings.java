@@ -6,12 +6,23 @@
 
 package javaapplication7;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Ash
  */
 public class Savings extends javax.swing.JFrame {
 
+    Connection con = null;
+    PreparedStatement pst = null;
+    
     /**
      * Creates new form Savings
      */
@@ -63,6 +74,11 @@ public class Savings extends javax.swing.JFrame {
         txtPassword.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 
         btnClear.setText("Clear");
+        btnClear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnClearActionPerformed(evt);
+            }
+        });
 
         jButton3.setText("Back");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
@@ -238,11 +254,49 @@ public class Savings extends javax.swing.JFrame {
 
     private void btnBalanceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBalanceActionPerformed
         // TODO add your handling code here:
+        try{
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost/bankdatabase", "root", "");
+            
+            Statement stmt = con.createStatement();
+            String queryStr = "SELECT amount FROM saving WHERE accountnumber = '"+txtAccNo.getText()+"';";
+            ResultSet rs = stmt.executeQuery(queryStr);
+            
+            while(rs.next()){
+                txtBalance.setText(rs.getString(1));
+            }
+            
+            
+        }
+        catch (Exception e){
+             JOptionPane.showMessageDialog(null, e);
+        }
     }//GEN-LAST:event_btnBalanceActionPerformed
 
     private void brnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_brnSaveActionPerformed
         // TODO add your handling code here:
+        try{
+            String queryStr = "UPDATE saving SET amount = '"+txtAmount.getText()+"', password = '"+txtPassword.getText()+"' WHERE accountnumber = '"+txtAccNo.getText()+"';";
+            con = DriverManager.getConnection("jdbc:mysql://localhost/bankdatabase", "root", "");
+            pst = con.prepareStatement(queryStr);
+            pst.executeUpdate();
+            
+            
+            JOptionPane.showMessageDialog(null, "Saving successful");
+            
+            
+        }
+        catch (Exception e){
+            JOptionPane.showMessageDialog(null, e);
+        }
     }//GEN-LAST:event_brnSaveActionPerformed
+
+    private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
+        // TODO add your handling code here:
+        txtAccNo.setText("");
+        txtPassword.setText("");
+        txtAmount.setText("");
+    }//GEN-LAST:event_btnClearActionPerformed
 
     /**
      * @param args the command line arguments
