@@ -106,6 +106,11 @@ public class AccDetails extends javax.swing.JFrame {
         });
 
         btnBack.setText("Back");
+        btnBack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBackActionPerformed(evt);
+            }
+        });
 
         jLabel11.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
@@ -181,6 +186,7 @@ public class AccDetails extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAllAccDetailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAllAccDetailActionPerformed
@@ -224,6 +230,11 @@ public class AccDetails extends javax.swing.JFrame {
              JOptionPane.showMessageDialog(null, e);
         }
     }//GEN-LAST:event_btnShowDetailActionPerformed
+
+    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
+        this.dispose();
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnBackActionPerformed
 
     /**
      * @param args the command line arguments

@@ -224,6 +224,7 @@ public class Transactions extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnBalanceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBalanceActionPerformed
@@ -252,7 +253,8 @@ public class Transactions extends javax.swing.JFrame {
     }//GEN-LAST:event_btnClearActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        // TODO add your handling code here:
+this.dispose();   
+// TODO add your handling code here:
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void btnTransferActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTransferActionPerformed
